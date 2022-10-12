@@ -1,5 +1,6 @@
 package com.pyanik.mathcoursestock.Instructor.service;
 
+import com.pyanik.mathcoursestock.exception.EntityNotSavedException;
 import com.pyanik.mathcoursestock.instructor.persistence.InputInstructorDTO;
 import com.pyanik.mathcoursestock.instructor.persistence.Instructor;
 import com.pyanik.mathcoursestock.instructor.persistence.InstructorDTO;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -60,6 +62,22 @@ class InstructorServiceImplTest {
         assertThat(instructorDTO.lastName()).isEqualTo(instructorSaved.getLastName());
         assertThat(instructorDTO.email()).isEqualTo(instructorSaved.getEmail());
         assertThat(instructorDTO.bio()).isEqualTo(instructorSaved.getBio());
+    }
+
+    @Test
+    void shouldThrowEntityNotSavedException() {
+        // given
+        Instructor instructorSaved = createInstructor();
+        when(instructorRepository.save(any())).thenReturn(instructorSaved);
+        when(instructorRepository.existsById(any())).thenReturn(false);
+        InputInstructorDTO inputInstructorDTO = new InputInstructorDTO(FIRST_NAME, LAST_NAME, EMAIL, BIO);
+
+        // when
+
+        // then
+        assertThatThrownBy(() -> instructorService.createInstructor(inputInstructorDTO))
+                .isInstanceOf(EntityNotSavedException.class)
+                .hasMessageStartingWith("An error occurred. Instructor can not be saved.");
     }
 
     private Instructor createInstructor() {
