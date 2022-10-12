@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/instructors")
 @RequiredArgsConstructor
-class InstructorController {
+public class InstructorController {
 
     private final InstructorService instructorService;
 
