@@ -97,7 +97,7 @@ class InstructorServiceImplTest {
     }
 
     @Test
-    void shouldReturnListOfWalletDTO() {
+    void shouldReturnListOfInstructorDTO() {
         // given
         List<Instructor> instructorsList = createListOfInstructors();
 
