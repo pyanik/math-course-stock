@@ -54,11 +54,11 @@ class InstructorServiceImplTest {
     private InstructorRepository instructorRepository;
 
     @Autowired
-    private InstructorModelMapper walletModelMapper;
+    private InstructorModelMapper instructorModelMapper;
 
     @BeforeEach
     void setup() {
-        instructorService = new InstructorServiceImpl(instructorRepository, walletModelMapper);
+        instructorService = new InstructorServiceImpl(instructorRepository, instructorModelMapper);
     }
 
     @Test
@@ -81,7 +81,7 @@ class InstructorServiceImplTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenForNotSavedInstructor() {
+    void shouldThrowExceptionForNotSavedInstructor() {
         // given
         Instructor instructorSaved = createInstructor();
         when(instructorRepository.save(any())).thenReturn(instructorSaved);
