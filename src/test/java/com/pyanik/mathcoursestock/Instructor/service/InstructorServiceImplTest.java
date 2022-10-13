@@ -81,7 +81,7 @@ class InstructorServiceImplTest {
     }
 
     @Test
-    void shouldThrowEntityNotSavedException() {
+    void shouldThrowExceptionWhenForNotSavedInstructor() {
         // given
         Instructor instructorSaved = createInstructor();
         when(instructorRepository.save(any())).thenReturn(instructorSaved);
