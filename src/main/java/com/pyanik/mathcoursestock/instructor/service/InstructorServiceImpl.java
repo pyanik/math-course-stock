@@ -31,7 +31,7 @@ public class InstructorServiceImpl implements InstructorService {
         if (isInstructorExists) {
             return instructorModelMapper.mapInstructorEntityToInstructorDTO(savedInstructor);
         }
-        throw new EntityNotSavedException("An error occurred. Instructor can not be saved.");
+        throw new EntityNotSavedException("An error occurred. Instructor can not be saved");
     }
 
     @Override
@@ -49,12 +49,12 @@ public class InstructorServiceImpl implements InstructorService {
     }
 
     @Override
-    public InstructorDTO getInstructor(Long id) {
-        Optional<Instructor> instructorOptional = instructorRepository.findById(id);
+    public InstructorDTO getInstructor(Long instructorId) {
+        Optional<Instructor> instructorOptional = instructorRepository.findById(instructorId);
         if (instructorOptional.isPresent())
             return instructorModelMapper.mapInstructorEntityToInstructorDTO(instructorOptional.get());
         else
-            throw new DataNotFoundException("Instructor could not be found " + id);
+            throw new DataNotFoundException(String.format("Instructor could not be found for given id: %s.", instructorId));
 
 
     }
@@ -62,7 +62,7 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorDTO replaceInstructor(Long instructorId, InputInstructorDTO inputInstructorDTO) {
         if (!instructorRepository.existsById(instructorId)) {
-            throw new DataNotFoundException("Instructor could not be found " + instructorId);
+            throw new DataNotFoundException(String.format("Instructor could not be found for given id: %s.", instructorId));
         }
         Instructor instructorToUpdate = instructorModelMapper.mapInputInstructorDTOToInstructorEntity(inputInstructorDTO);
         instructorToUpdate.setId(instructorId);

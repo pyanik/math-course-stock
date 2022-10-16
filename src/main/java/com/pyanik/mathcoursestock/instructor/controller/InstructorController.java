@@ -35,8 +35,8 @@ public class InstructorController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<InstructorDTO> getInstructor(@PathVariable Long id) {
-        InstructorDTO Instructor = instructorService.getInstructor(id);
+    public ResponseEntity<InstructorDTO> getInstructor(@PathVariable Long instructorId) {
+        InstructorDTO Instructor = instructorService.getInstructor(instructorId);
 
         return ResponseEntity.ok(Instructor);
     }
