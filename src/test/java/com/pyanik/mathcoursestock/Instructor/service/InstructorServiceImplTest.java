@@ -65,11 +65,11 @@ class InstructorServiceImplTest {
     void shouldCreateInstructor() {
         // given
         Instructor savedInstructor = createInstructor();
-        when(instructorRepository.save(any())).thenReturn(savedInstructor);
-        when(instructorRepository.existsById(any())).thenReturn(true);
         InputInstructorDTO inputInstructorDTO = new InputInstructorDTO(FIRST_NAME_1, LAST_NAME_1, EMAIL_1, BIO_1);
 
         // when
+        when(instructorRepository.save(any())).thenReturn(savedInstructor);
+        when(instructorRepository.existsById(any())).thenReturn(true);
         InstructorDTO instructorDTO = instructorService.createInstructor(inputInstructorDTO);
 
         // then
@@ -84,11 +84,11 @@ class InstructorServiceImplTest {
     void shouldThrowExceptionForNotSavedInstructor() {
         // given
         Instructor savedInstructor = createInstructor();
-        when(instructorRepository.save(any())).thenReturn(savedInstructor);
-        when(instructorRepository.existsById(any())).thenReturn(false);
         InputInstructorDTO inputInstructorDTO = new InputInstructorDTO(FIRST_NAME_1, LAST_NAME_1, EMAIL_1, BIO_1);
 
         // when
+        when(instructorRepository.save(any())).thenReturn(savedInstructor);
+        when(instructorRepository.existsById(any())).thenReturn(false);
 
         // then
         assertThatThrownBy(() -> instructorService.createInstructor(inputInstructorDTO))
@@ -132,16 +132,16 @@ class InstructorServiceImplTest {
         // then
         assertThat(exception)
                 .isInstanceOf(DataNotFoundException.class)
-                .hasMessage("An error occurred while retrieving the list of instructors");
+                .hasMessage("An error occurred while retrieving the list of instructors.");
     }
 
     @Test
     void shouldReturnInstructorWithGivenId() {
         // given
         Instructor instructor = createInstructor();
-        Mockito.when(instructorRepository.findById(ID_1)).thenReturn(Optional.of(instructor));
 
         // when
+        Mockito.when(instructorRepository.findById(ID_1)).thenReturn(Optional.of(instructor));
         InstructorDTO instructorRetrieved = instructorService.getInstructor(ID_1);
 
         // then
@@ -163,7 +163,7 @@ class InstructorServiceImplTest {
         // then
         assertThat(exception)
                 .isInstanceOf(DataNotFoundException.class)
-                .hasMessage("Instructor could not be found " + ID_1);
+                .hasMessage(String.format("Instructor with id %s could not be found.", ID_1));
     }
 
     @Test
@@ -171,6 +171,7 @@ class InstructorServiceImplTest {
         // given
         InputInstructorDTO inputInstructorDTO = createInputInstructorDTO();
         Instructor updatedInstructor = createUpdatedInstructor();
+
         // when
         when(instructorRepository.existsById(ID_1)).thenReturn(true);
         when(instructorRepository.save(any())).thenReturn(updatedInstructor);
@@ -196,7 +197,7 @@ class InstructorServiceImplTest {
         // then
         assertThat(exception)
                 .isInstanceOf(DataNotFoundException.class)
-                .hasMessage("Instructor could not be found " + ID_1);
+                .hasMessage(String.format("Instructor with id %s could not be found.", ID_1));
     }
 
     private Instructor createUpdatedInstructor() {

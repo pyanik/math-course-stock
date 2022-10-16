@@ -31,7 +31,7 @@ public class InstructorServiceImpl implements InstructorService {
         if (isInstructorExists) {
             return instructorModelMapper.mapInstructorEntityToInstructorDTO(savedInstructor);
         }
-        throw new EntityNotSavedException("An error occurred. Instructor can not be saved");
+        throw new EntityNotSavedException("An error occurred. Instructor can not be saved.");
     }
 
     @Override
@@ -44,7 +44,7 @@ public class InstructorServiceImpl implements InstructorService {
                     .toList();
         } catch (RuntimeException e ) {
             log.error("List of instructors not found");
-            throw new DataNotFoundException("An error occurred while retrieving the list of instructors");
+            throw new DataNotFoundException("An error occurred while retrieving the list of instructors.");
         }
     }
 
@@ -54,7 +54,7 @@ public class InstructorServiceImpl implements InstructorService {
         if (instructorOptional.isPresent())
             return instructorModelMapper.mapInstructorEntityToInstructorDTO(instructorOptional.get());
         else
-            throw new DataNotFoundException(String.format("Instructor could not be found for given id: %s.", instructorId));
+            throw new DataNotFoundException(String.format("Instructor with id %s could not be found.", instructorId));
 
 
     }
@@ -62,7 +62,7 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public InstructorDTO replaceInstructor(Long instructorId, InputInstructorDTO inputInstructorDTO) {
         if (!instructorRepository.existsById(instructorId)) {
-            throw new DataNotFoundException(String.format("Instructor could not be found for given id: %s.", instructorId));
+            throw new DataNotFoundException(String.format("Instructor with id %s could not be found.", instructorId));
         }
         Instructor instructorToUpdate = instructorModelMapper.mapInputInstructorDTOToInstructorEntity(inputInstructorDTO);
         instructorToUpdate.setId(instructorId);
