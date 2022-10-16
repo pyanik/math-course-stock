@@ -24,7 +24,7 @@ public class InstructorServiceImpl implements InstructorService {
 
     @Override
     public InstructorDTO createInstructor(InputInstructorDTO inputInstructorDTO) {
-        Instructor instructor = instructorModelMapper.mapCreateInstructorDTOToInstructorEntity(inputInstructorDTO);
+        Instructor instructor = instructorModelMapper.mapInputInstructorDTOToInstructorEntity(inputInstructorDTO);
         Instructor savedInstructor = instructorRepository.save(instructor);
         boolean isInstructorExists = instructorRepository.existsById(savedInstructor.getId());
 
@@ -57,5 +57,16 @@ public class InstructorServiceImpl implements InstructorService {
             throw new DataNotFoundException("Instructor could not be found " + id);
 
 
+    }
+
+    @Override
+    public InstructorDTO replaceInstructor(Long instructorId, InputInstructorDTO inputInstructorDTO) {
+        if (!instructorRepository.existsById(instructorId)) {
+            throw new DataNotFoundException("Instructor could not be found " + instructorId);
+        }
+        Instructor instructorToUpdate = instructorModelMapper.mapInputInstructorDTOToInstructorEntity(inputInstructorDTO);
+        instructorToUpdate.setId(instructorId);
+        Instructor updatedInstructor = instructorRepository.save(instructorToUpdate);
+        return instructorModelMapper.mapInstructorEntityToInstructorDTO(updatedInstructor);
     }
 }

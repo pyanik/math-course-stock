@@ -11,4 +11,6 @@ public interface InstructorService {
     List<InstructorDTO> getAllInstructors();
 
     InstructorDTO getInstructor(Long id);
+
+    InstructorDTO replaceInstructor(Long id, InputInstructorDTO inputInstructorDTO);
 }

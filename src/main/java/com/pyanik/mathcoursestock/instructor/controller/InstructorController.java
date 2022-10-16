@@ -40,4 +40,10 @@ public class InstructorController {
 
         return ResponseEntity.ok(Instructor);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<InstructorDTO> updateInstructor(@PathVariable Long instructorId, @Valid @RequestBody InputInstructorDTO inputInstructorDTO) {
+        InstructorDTO updatedInstructor = instructorService.replaceInstructor(instructorId, inputInstructorDTO);
+        return ResponseEntity.ok(updatedInstructor);
+    }
 }
