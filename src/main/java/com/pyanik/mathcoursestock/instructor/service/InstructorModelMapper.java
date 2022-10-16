@@ -11,5 +11,5 @@ public interface InstructorModelMapper {
     InstructorDTO mapInstructorEntityToInstructorDTO(Instructor instructor);
 
     @Mapping(target = "id", ignore = true)
-    Instructor mapCreateInstructorDTOToInstructorEntity(InputInstructorDTO inputInstructorDTO);
+    Instructor mapInputInstructorDTOToInstructorEntity(InputInstructorDTO inputInstructorDTO);
 }

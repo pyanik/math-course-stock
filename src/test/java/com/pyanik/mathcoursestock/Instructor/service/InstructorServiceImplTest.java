@@ -64,8 +64,8 @@ class InstructorServiceImplTest {
     @Test
     void shouldCreateInstructor() {
         // given
-        Instructor instructorSaved = createInstructor();
-        when(instructorRepository.save(any())).thenReturn(instructorSaved);
+        Instructor savedInstructor = createInstructor();
+        when(instructorRepository.save(any())).thenReturn(savedInstructor);
         when(instructorRepository.existsById(any())).thenReturn(true);
         InputInstructorDTO inputInstructorDTO = new InputInstructorDTO(FIRST_NAME_1, LAST_NAME_1, EMAIL_1, BIO_1);
 
@@ -73,18 +73,18 @@ class InstructorServiceImplTest {
         InstructorDTO instructorDTO = instructorService.createInstructor(inputInstructorDTO);
 
         // then
-        assertThat(instructorDTO.id()).isEqualTo(instructorSaved.getId());
-        assertThat(instructorDTO.firstName()).isEqualTo(instructorSaved.getFirstName());
-        assertThat(instructorDTO.lastName()).isEqualTo(instructorSaved.getLastName());
-        assertThat(instructorDTO.email()).isEqualTo(instructorSaved.getEmail());
-        assertThat(instructorDTO.bio()).isEqualTo(instructorSaved.getBio());
+        assertThat(instructorDTO.id()).isEqualTo(savedInstructor.getId());
+        assertThat(instructorDTO.firstName()).isEqualTo(savedInstructor.getFirstName());
+        assertThat(instructorDTO.lastName()).isEqualTo(savedInstructor.getLastName());
+        assertThat(instructorDTO.email()).isEqualTo(savedInstructor.getEmail());
+        assertThat(instructorDTO.bio()).isEqualTo(savedInstructor.getBio());
     }
 
     @Test
     void shouldThrowExceptionForNotSavedInstructor() {
         // given
-        Instructor instructorSaved = createInstructor();
-        when(instructorRepository.save(any())).thenReturn(instructorSaved);
+        Instructor savedInstructor = createInstructor();
+        when(instructorRepository.save(any())).thenReturn(savedInstructor);
         when(instructorRepository.existsById(any())).thenReturn(false);
         InputInstructorDTO inputInstructorDTO = new InputInstructorDTO(FIRST_NAME_1, LAST_NAME_1, EMAIL_1, BIO_1);
 
@@ -101,13 +101,12 @@ class InstructorServiceImplTest {
         // given
         List<Instructor> instructorsList = createListOfInstructors();
 
-        Mockito.when(instructorRepository.findAll()).thenReturn(instructorsList);
-
         // when
+        Mockito.when(instructorRepository.findAll()).thenReturn(instructorsList);
         List<InstructorDTO> allInstructors = instructorService.getAllInstructors();
 
         // then
-        assertThat(allInstructors).hasSize(3);
+        assertThat(allInstructors).hasSize(instructorsList.size());
         assertThat(allInstructors.get(0).firstName()).isEqualTo(FIRST_NAME_1);
         assertThat(allInstructors.get(0).lastName()).isEqualTo(LAST_NAME_1);
         assertThat(allInstructors.get(0).email()).isEqualTo(EMAIL_1);
@@ -167,14 +166,49 @@ class InstructorServiceImplTest {
                 .hasMessage("Instructor could not be found " + ID_1);
     }
 
+    @Test
+    void shouldUpdateInstructor() {
+        // given
+        InputInstructorDTO inputInstructorDTO = createInputInstructorDTO();
+        Instructor updatedInstructor = createUpdatedInstructor();
+        // when
+        when(instructorRepository.existsById(ID_1)).thenReturn(true);
+        when(instructorRepository.save(any())).thenReturn(updatedInstructor);
+        InstructorDTO instructorDTO = instructorService.replaceInstructor(ID_1, inputInstructorDTO);
+
+        // then
+        assertThat(instructorDTO.id()).isEqualTo(updatedInstructor.getId());
+        assertThat(instructorDTO.firstName()).isEqualTo(updatedInstructor.getFirstName());
+        assertThat(instructorDTO.lastName()).isEqualTo(updatedInstructor.getLastName());
+        assertThat(instructorDTO.email()).isEqualTo(updatedInstructor.getEmail());
+        assertThat(instructorDTO.bio()).isEqualTo(updatedInstructor.getBio());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenInstructorToUpdateNotFound() {
+        // given
+        InputInstructorDTO inputInstructorDTO = createInputInstructorDTO();
+
+        // when
+        Mockito.when(instructorRepository.existsById(ID_1)).thenReturn(false);
+        Exception exception = assertThrows(RuntimeException.class, () -> instructorService.replaceInstructor(ID_1, inputInstructorDTO));
+
+        // then
+        assertThat(exception)
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage("Instructor could not be found " + ID_1);
+    }
+
+    private Instructor createUpdatedInstructor() {
+        return new Instructor(ID_1, FIRST_NAME_2, LAST_NAME_2, EMAIL_2, BIO_3);
+    }
+
+    private InputInstructorDTO createInputInstructorDTO() {
+        return new InputInstructorDTO(FIRST_NAME_2, LAST_NAME_2, EMAIL_2, BIO_3);
+    }
+
     private Instructor createInstructor() {
-        Instructor instructor = new Instructor();
-        instructor.setId(ID_1);
-        instructor.setFirstName(FIRST_NAME_1);
-        instructor.setLastName(LAST_NAME_1);
-        instructor.setEmail(EMAIL_1);
-        instructor.setBio(BIO_1);
-        return instructor;
+        return new Instructor(ID_1, FIRST_NAME_1, LAST_NAME_1, EMAIL_1, BIO_1);
     }
 
     private List<Instructor> createListOfInstructors() {
