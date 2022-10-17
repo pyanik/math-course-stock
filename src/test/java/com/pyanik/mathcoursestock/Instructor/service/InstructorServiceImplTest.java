@@ -200,6 +200,20 @@ class InstructorServiceImplTest {
                 .hasMessage(String.format("Instructor with id %s could not be found.", ID_1));
     }
 
+    @Test
+    void shouldThrowExceptionWhenInstructorToDeleteNotFound() {
+        // given
+
+        // when
+        Mockito.when(instructorRepository.existsById(ID_1)).thenReturn(false);
+        Exception exception = assertThrows(RuntimeException.class, () -> instructorService.deleteInstructor(ID_1));
+
+        // then
+        assertThat(exception)
+                .isInstanceOf(DataNotFoundException.class)
+                .hasMessage(String.format("Instructor with id %s could not be found.", ID_1));
+    }
+
     private Instructor createUpdatedInstructor() {
         return new Instructor(ID_1, FIRST_NAME_2, LAST_NAME_2, EMAIL_2, BIO_3);
     }
