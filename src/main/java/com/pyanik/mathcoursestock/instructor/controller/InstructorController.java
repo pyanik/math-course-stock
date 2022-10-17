@@ -41,9 +41,15 @@ public class InstructorController {
         return ResponseEntity.ok(Instructor);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("{instructorId}")
     public ResponseEntity<InstructorDTO> updateInstructor(@PathVariable Long instructorId, @Valid @RequestBody InputInstructorDTO inputInstructorDTO) {
         InstructorDTO updatedInstructor = instructorService.replaceInstructor(instructorId, inputInstructorDTO);
         return ResponseEntity.ok(updatedInstructor);
+    }
+
+    @DeleteMapping("{instructorId}")
+    public ResponseEntity<?> deleteInstructor(@PathVariable Long instructorId) {
+        instructorService.deleteInstructor(instructorId);
+        return ResponseEntity.noContent().build();
     }
 }

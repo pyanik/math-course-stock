@@ -13,4 +13,6 @@ public interface InstructorService {
     InstructorDTO getInstructor(Long id);
 
     InstructorDTO replaceInstructor(Long id, InputInstructorDTO inputInstructorDTO);
+
+    void deleteInstructor(Long instructorId);
 }

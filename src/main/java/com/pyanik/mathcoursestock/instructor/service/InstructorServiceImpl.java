@@ -69,4 +69,12 @@ public class InstructorServiceImpl implements InstructorService {
         Instructor updatedInstructor = instructorRepository.save(instructorToUpdate);
         return instructorModelMapper.mapInstructorEntityToInstructorDTO(updatedInstructor);
     }
+
+    @Override
+    public void deleteInstructor(Long instructorId) {
+        if (!instructorRepository.existsById(instructorId)) {
+            throw new DataNotFoundException(String.format("Instructor with id %s could not be found.", instructorId));
+        }
+        instructorRepository.deleteById(instructorId);
+    }
 }
